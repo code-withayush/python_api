@@ -6,7 +6,10 @@ import os
 import logging
 app = Flask(__name__)
 CORS(app)
+from dotenv import load_dotenv
+import os
 
+load_dotenv() 
 # 🔹 Set your Google Gemini API Key here
 
 genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
