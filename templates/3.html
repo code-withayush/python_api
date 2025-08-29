@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Story Idea Generator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f6fa;
+      padding: 20px;
+    }
+    .container {
+      max-width: 600px;
+      margin: auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+    label {
+      font-weight: bold;
+      margin-top: 10px;
+      display: block;
+    }
+    input {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    button {
+      margin-top: 15px;
+      padding: 10px;
+      width: 100%;
+      background: #007bff;
+      border: none;
+      color: white;
+      font-size: 16px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #0056b3;
+    }
+    .output {
+      margin-top: 20px;
+      padding: 15px;
+      border-radius: 5px;
+      background: #f1f1f1;
+      white-space: pre-wrap;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Story Idea Generator ✨</h1>
+    
+    <label for="genre">Genre:</label>
+    <input type="text" id="genre" placeholder="e.g. Fantasy, Mystery">
+
+    <label for="theme">Theme:</label>
+    <input type="text" id="theme" placeholder="e.g. Hope, Friendship">
+
+    <label for="character">Main Character:</label>
+    <input type="text" id="character" placeholder="e.g. Hero, Detective">
+
+    <button onclick="generateIdea()">Generate Story Idea</button>
+
+    <div id="output" class="output"></div>
+  </div>
+
+  <script>
+    async function generateIdea() {
+      const genre = document.getElementById("genre").value || "Fantasy";
+      const theme = document.getElementById("theme").value || "Hope";
+      const character = document.getElementById("character").value || "Hero";
+      
+      document.getElementById("output").innerText = "Generating your story idea... ⏳";
+
+      try {
+        const response = await fetch("http://127.0.0.1:5000/generate", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ genre, theme, character })
+        });
+
+        const data = await response.json();
+
+        if (data.storyIdea) {
+          document.getElementById("output").innerText = "✨ Generated Story Idea:\n\n" + data.storyIdea;
+        } else {
+          document.getElementById("output").innerText = "⚠️ Error: " + (data.error || "Unknown error");
+        }
+      } catch (err) {
+        document.getElementById("output").innerText = "❌ Request failed: " + err;
+      }
+    }
+  </script>
+</body>
+</html>
